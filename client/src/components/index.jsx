@@ -2,7 +2,17 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import Header from "./header";
 import Cards from "./card";
+import { io } from "socket.io-client";
+import { useEffect, useState } from "react";
 const Index = ({ name }) => {
+  const [socket, setSocket] = useState();
+  useEffect(() => {
+    setSocket(io("http://localhost:5000"));
+  }, []);
+
+  useEffect(() => {
+    socket?.emit("addNewUser", name);
+  }, [socket, name]);
   return (
     <>
       <Typography
@@ -17,7 +27,7 @@ const Index = ({ name }) => {
         {name}
       </Typography>
       <Header />
-      <Cards />
+      <Cards socket={socket} name={name} />
     </>
   );
 };

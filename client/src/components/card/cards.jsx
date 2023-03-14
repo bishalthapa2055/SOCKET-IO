@@ -7,7 +7,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import AddCommentOutlinedIcon from "@mui/icons-material/AddCommentOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Box,
@@ -18,8 +18,33 @@ import {
   CardContent,
 } from "@mui/material";
 
-export default function ImageAvatars({ name, avatar, image }) {
-  const [color, setColor] = useState(false);
+export default function ImageAvatars({
+  id,
+  name,
+  username,
+  avatar,
+  image,
+  socket,
+  user,
+}) {
+  const [liked, setLiked] = useState(false);
+  const [notification, setNotification] = useState();
+
+  const handleNotification = (type) => {
+    setLiked(true);
+    socket?.emit("sendNotification", {
+      senderName: user,
+      recieverName: username,
+      type,
+    });
+  };
+
+  useEffect(() => {
+    socket?.on("getNotification", (data) => {
+      setNotification((prev) => [...prev, data]);
+    });
+  }, [socket]);
+  console.log(notification ? notification : 0);
   return (
     <>
       <Box
@@ -80,21 +105,27 @@ export default function ImageAvatars({ name, avatar, image }) {
               top: "6px",
             }}
           >
-            {color ? (
+            {liked ? (
               <>
                 <FavoriteIcon
                   sx={{ color: "red", cursor: "pointer" }}
-                  onClick={() => setColor(false)}
+                  onClick={() => setLiked(false)}
                 />
               </>
             ) : (
               <FavoriteBorderIcon
                 sx={{ cursor: "pointer" }}
-                onClick={() => setColor(true)}
+                onClick={() => handleNotification(1)}
               />
             )}
-            <AddCommentOutlinedIcon sx={{ cursor: "pointer" }} />
-            <ShareOutlinedIcon sx={{ cursor: "pointer" }} />
+            <AddCommentOutlinedIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => handleNotification(2)}
+            />
+            <ShareOutlinedIcon
+              sx={{ cursor: "pointer" }}
+              onClick={() => handleNotification(3)}
+            />
           </Stack>
         </Box>
       </Box>

@@ -12,35 +12,47 @@ import ImageAvatars from "./cards";
 
 const objects = [
   {
+    id: 1,
+    username: "suraj",
     name: "Suraj Khadka",
     avatar: image11,
     image: image1,
   },
   {
-    name: "Surekshya Khadka",
+    id: 2,
+    username: "Surekshya",
+    name: "surekshya Khadka",
     avatar: image12,
     image: image2,
   },
   {
+    id: 3,
+    username: "pasang",
     name: "Pasang Norbu Sherpa",
     avatar: image13,
     image: image3,
   },
   {
+    id: 4,
+    username: "nawal",
     name: "Nawal Shrestha",
     avatar: image14,
     image: image4,
   },
 ];
 
-const Card = () => {
+const Card = ({ socket, name }) => {
   return (
     <>
       {objects.map((data) => (
         <ImageAvatars
+          id={data.id}
+          username={data.username}
           name={data.name}
           avatar={data.avatar}
           image={data.image}
+          socket={socket}
+          user={name}
         />
       ))}
     </>

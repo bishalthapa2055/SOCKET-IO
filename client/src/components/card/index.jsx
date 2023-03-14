@@ -2,11 +2,11 @@ import React from "react";
 import Card from "./card";
 import ImageAvatars from "./cards";
 
-const Index = () => {
+const Index = ({ socket, name }) => {
   return (
     <div>
       {/* <ImageAvatars /> */}
-      <Card />
+      <Card socket={socket} name={name} />
     </div>
   );
 };
