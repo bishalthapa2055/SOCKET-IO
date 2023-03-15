@@ -41,7 +41,14 @@ export default function ImageAvatars({
 
   useEffect(() => {
     socket?.on("getNotification", (data) => {
-      setNotification((prev) => [...prev, data]);
+      setNotification((prev) => {
+        // [...prev, data]
+        if (prev && typeof prev[Symbol.iterator] === "function") {
+          return [...prev, data];
+        } else {
+          return [data];
+        }
+      });
     });
   }, [socket]);
   console.log(notification ? notification : 0);
